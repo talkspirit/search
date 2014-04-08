@@ -8,12 +8,12 @@
 
     "require": {
         "php": ">=5.3.2",
-        "doctrine/common": "2.3.*"
+        "doctrine/common": "2.4.*@dev"
     },
     "require-dev": {
-        "ruflin/Elastica": "0.19.*",
-        "doctrine/orm": "2.3.*",
-        "doctrine/mongodb": "1.0.*",
+        "ruflin/elastica": "v1.0.1.2",
+        "doctrine/orm": "2.4.*@dev",
+        "doctrine/mongodb": "1.1.*@dev",
         "doctrine/mongodb-odm": "1.0.*@dev"
     },
     "autoload": {
