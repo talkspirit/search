@@ -14,7 +14,7 @@
         "ruflin/Elastica": "0.19.*",
         "doctrine/orm": "2.3.*",
         "doctrine/mongodb": "1.0.*",
-        "doctrine/mongodb-odm": "1.0.*"
+        "doctrine/mongodb-odm": "1.0.*@dev"
     },
     "autoload": {
         "psr-0": {
