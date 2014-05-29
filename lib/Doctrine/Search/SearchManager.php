@@ -234,7 +234,7 @@ class SearchManager
         foreach ($objects as $object) {
             $metadata = $this->getClassMetadata(get_class($object));
             $document = $serialize ? $this->serializer->serialize($object) : $object;
-            $documents[$metadata->index][$metadata->type][$object->getId()] = $document;
+            $documents[$metadata->index][$metadata->type][(string) $object->getId()] = $document;
         }
         return $documents;
     }
