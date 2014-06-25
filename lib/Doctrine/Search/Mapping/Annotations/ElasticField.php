@@ -66,9 +66,14 @@ final class ElasticField extends Field
      * @var boolean
      */
     public $store;
-    
+
     /**
      * @var mixed
      */
     public $nullValue;
+
+    /**
+     * @var string
+     */
+    public $term_vector;
 }
