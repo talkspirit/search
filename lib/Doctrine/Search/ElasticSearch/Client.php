@@ -163,6 +163,17 @@ class Client implements SearchClientInterface
                 $properties[$propertyName]['boost'] = $fieldMapping->boost;
             }
 
+            if (isset($fieldMapping->store)) {
+                $properties[$propertyName]['store'] = $fieldMapping->store;
+            }
+
+            if ($fieldMapping->type == 'attachment' && isset($fieldMapping->fields)) {
+                $properties[$propertyName]['fields'] = array_map(function ($field) {
+                    unset($field['type']);
+                    return $field;
+                }, $this->getMapping($fieldMapping->fields));
+            }
+
             if ($fieldMapping->type == 'multi_field' && isset($fieldMapping->fields)) {
                 $properties[$propertyName]['fields'] = $this->getMapping($fieldMapping->fields);
             }

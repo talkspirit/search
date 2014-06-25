@@ -31,19 +31,29 @@ final class ElasticField extends Field
      * @var boolean
      */
     public $includeInAll;
-    
-    /** 
-     * @var string 
+
+    /**
+     * @var string
      */
     public $index;
-    
-    /** 
-     * @var array 
+
+    /**
+     * @var array
      */
     public $fields;
-    
-    /** 
-     * @var array 
+
+    /**
+     * @var array
      */
     public $properties;
+
+    /**
+     * @var string
+     */
+    public $store;
+    /**
+     * @var string
+     */
+    public $term_vector;
 }
+
