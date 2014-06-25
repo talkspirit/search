@@ -280,6 +280,10 @@ class Client implements SearchClientInterface
                 $properties[$propertyName]['boost'] = $fieldMapping->boost;
             }
 
+            if (isset($fieldMapping->store)) {
+                $properties[$propertyName]['store'] = $fieldMapping->store;
+            }
+
             if (isset($fieldMapping->analyzer)) {
                 $properties[$propertyName]['analyzer'] = $fieldMapping->analyzer;
             }
