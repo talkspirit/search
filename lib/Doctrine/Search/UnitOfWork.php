@@ -213,7 +213,7 @@ class UnitOfWork
                 throw new DoctrineSearchException('Entity must have an id to be indexed');
             }
 
-            $documents[get_class($object)][$id] = $document;
+            $documents[get_class($object)][(string) $id] = $document;
         }
 
         return $documents;
