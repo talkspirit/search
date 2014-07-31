@@ -132,7 +132,10 @@ class ClassMetadata implements ClassMetadataInterface
      * @var mixed
      */
     public $identifier;
-
+    /**
+     * @var string
+     */
+    public $repositoryClass;
 
     public function __construct($documentName)
     {
@@ -167,7 +170,8 @@ class ClassMetadata implements ClassMetadataInterface
             'type',
             'value',
             'reflFields',
-            'identifier'
+            'identifier',
+            'repositoryClass'
         );
     }
 
