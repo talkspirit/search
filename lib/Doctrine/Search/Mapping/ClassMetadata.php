@@ -143,6 +143,10 @@ class ClassMetadata implements ClassMetadataInterface
      */
     public $identifier = array();
 
+    /**
+     * @var string
+     */
+    public $repositoryClass;
 
     public function __construct($documentName)
     {
@@ -177,7 +181,8 @@ class ClassMetadata implements ClassMetadataInterface
             'type',
             'value',
             'identifier',
-            'rootMappings'
+            'rootMappings',
+            'repositoryClass'
         );
     }
 
