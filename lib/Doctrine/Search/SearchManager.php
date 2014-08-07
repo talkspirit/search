@@ -230,6 +230,25 @@ class SearchManager implements ObjectManager
     }
 
     /**
+     * Update the object from the index
+     *
+     * @param array|object $objects
+     *
+     * @throws UnexpectedTypeException
+     */
+    public function update($objects) {
+        if(!is_array($objects) && !$objects instanceof \Traversable) {
+            $objects = array($objects);
+        }
+        foreach($objects as $object) {
+            if (!is_object($object)) {
+                throw new UnexpectedTypeException($object, 'object');
+            }
+            $this->unitOfWork->update($object);
+        }
+    }
+
+    /**
      * Remove the object from the index
      *
      * @param array|object $objects

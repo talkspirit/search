@@ -110,7 +110,31 @@ class Client implements SearchClientInterface
     public function updateDocuments(ClassMetadata $class, array $documents)
     {
         $type = $this->getIndex($class->index)->getType($class->type);
-        $type->updateDocuments($documents);
+
+        $parameters = $this->getParameters($class->parameters);
+
+        $bulk = array();
+        foreach ($documents as $id => $document) {
+            $elasticadoc = new Document($id);
+            foreach($parameters as $name => $value) {
+                if(isset($document[$value])) {
+                    if(method_exists($elasticadoc, "set{$name}")) {
+                        $elasticadoc->{"set{$name}"}($document[$value]);
+                    } else {
+                        $elasticadoc->setParam($name, $document[$value]);
+                    }
+                    unset($document[$value]);
+                }
+            }
+            $elasticadoc->setData($document);
+            $bulk[] = $elasticadoc;
+        }
+
+        if(count($bulk) > 1) {
+            $type->updateDocuments($bulk);
+        } else {
+            $type->updateDocument($bulk[0]);
+        }
     }
 
     /**

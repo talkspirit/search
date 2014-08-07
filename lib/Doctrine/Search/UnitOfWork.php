@@ -221,7 +221,7 @@ class UnitOfWork
      */
     private function commitUpdated()
     {
-        $documents = $this->sortObjects($this->scheduledForUpdate, false);
+        $documents = $this->sortObjects($this->scheduledForUpdate);
         $client = $this->sm->getClient();
 
         foreach ($documents as $entityName => $documents) {
