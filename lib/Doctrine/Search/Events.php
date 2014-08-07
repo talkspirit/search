@@ -115,4 +115,16 @@ final class Events
      * @var string
      */
     const onClear = 'onClear';
+    /**
+     *
+     * @var string
+     */
+    const preUpdate = 'preUpdate';
+
+    /**
+     *
+     * @var string
+     */
+    const postUpdate = 'postUpdate';
+
 }

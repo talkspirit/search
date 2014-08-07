@@ -37,6 +37,11 @@ class UnitOfWork
     /**
      * @var array
      */
+    private $scheduledForUpdate = array();
+
+    /**
+     * @var array
+     */
     private $updatedIndexes = array();
 
     /**
@@ -89,6 +94,25 @@ class UnitOfWork
     }
 
     /**
+     * Upadte an entity as part of the current unit of work.
+     *
+     * @param object $entity The entity to update.
+     */
+    public function update($entity)
+    {
+        if ($this->evm->hasListeners(Events::preUpdate)) {
+            $this->evm->dispatchEvent(Events::preUpdate, new Event\LifecycleEventArgs($entity, $this->sm));
+        }
+
+        $oid = spl_object_hash($entity);
+        $this->scheduledForUpdate[$oid] = $entity;
+
+        if ($this->evm->hasListeners(Events::postUpdate)) {
+            $this->evm->dispatchEvent(Events::postUpdate, new Event\LifecycleEventArgs($entity, $this->sm));
+        }
+    }
+
+    /**
      * Clears the UnitOfWork.
      *
      * @param string $entityName if given, only entities of this type will get detached
@@ -98,6 +122,7 @@ class UnitOfWork
         if ($entityName === null) {
             $this->scheduledForDelete =
             $this->scheduledForPersist =
+            $this->scheduledForUpdate =
             $this->updatedIndexes = array();
         } else {
             //TODO: implement for named entity classes
@@ -128,7 +153,7 @@ class UnitOfWork
         //TODO: single/array entity commit handling
         $this->commitRemoved();
         $this->commitPersisted();
-
+        $this->commitUpdated();
         //Force refresh of updated indexes
         if($entity === true) {
             $client = $this->sm->getClient();
@@ -171,6 +196,21 @@ class UnitOfWork
             $classMetadata = $this->sm->getClassMetadata($entityName);
             $this->updatedIndexes[] = $classMetadata->index;
             $client->removeDocuments($classMetadata, $documents);
+        }
+    }
+
+    /**
+     * Commit deleted entities to the database
+     */
+    private function commitUpdated()
+    {
+        $documents = $this->sortObjects($this->scheduledForUpdate, false);
+        $client = $this->sm->getClient();
+
+        foreach ($documents as $entityName => $documents) {
+            $classMetadata = $this->sm->getClassMetadata($entityName);
+            $this->updatedIndexes[] = $classMetadata->index;
+            $client->updateDocuments($classMetadata, $documents);
         }
     }
 

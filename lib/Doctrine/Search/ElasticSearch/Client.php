@@ -108,6 +108,15 @@ class Client implements SearchClientInterface
     /**
      * {@inheritDoc}
      */
+    public function updateDocuments(ClassMetadata $class, array $documents)
+    {
+        $type = $this->getIndex($class->index)->getType($class->type);
+        $type->updateDocuments($documents);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function removeAll(ClassMetadata $class, $query = null)
     {
         $type = $this->getIndex($class->index)->getType($class->type);
