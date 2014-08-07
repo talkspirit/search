@@ -124,6 +124,13 @@ interface SearchClientInterface
     public function removeDocuments(ClassMetadata $class, array $documents);
 
     /**
+     * update Documents
+     * @param  ClassMetadata
+     * @param  array         $documents
+     */
+    public function updateDocuments(ClassMetadata $class, array $documents);
+
+    /**
      * Remove all documents of a given type from the specified index
      * without deleting the index itself
      *
