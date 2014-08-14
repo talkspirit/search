@@ -76,4 +76,9 @@ final class ElasticField extends Field
      * @var string
      */
     public $term_vector;
+    /**
+     * exclude or include the field in _source field. If false the field is exclude
+     * @var boolean
+     */
+    public $source;
 }

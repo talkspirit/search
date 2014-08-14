@@ -23,8 +23,6 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadata as ClassMetadataInterface;
 use Doctrine\Search\Mapping\Annotations\ElasticField;
 use Doctrine\Search\Mapping\Annotations\ElasticRoot;
 
-
-
 /**
  * A <tt>ClassMetadata</tt> instance holds all the object-document mapping metadata
  * of a document and it's references.
@@ -89,6 +87,10 @@ class ClassMetadata implements ClassMetadataInterface
      * @var boolean
      */
     public $source = true;
+    /**
+     * @var array
+     */
+    public $source_paths = [];
 
     /**
      * @var float
@@ -263,6 +265,24 @@ class ClassMetadata implements ClassMetadataInterface
     {
         $fieldName = $field->getName();
         $this->fieldMappings[$fieldName] = $mapping;
+        $this->checkSourcePath($field, $mapping);
+    }
+
+    /**
+     * [checkSourcePath description]
+     * @param  Reflector $field   [description]
+     * @param  array     $mapping [description]
+     * @return void             [description]
+     */
+    private function checkSourcePath(\Reflector $field, $mapping = array())
+    {
+        if (!empty($mapping->source)) {
+            if ("no" === $mapping->source) {
+                $this->source_paths['excludes'][] = $field->name;
+            } elseif ("yes" === $mapping->source) {
+                $this->source_paths['includes'][] = $field->name;
+            }
+        }
     }
 
     /**
@@ -424,6 +444,7 @@ class ClassMetadata implements ClassMetadataInterface
 
         foreach ($this->fieldMappings as $field => $mapping) {
             $this->reflFields[$field] = $reflService->getAccessibleProperty($this->className, $field);
+            $this->checkSourcePath($field, $mapping);
         }
     }
 

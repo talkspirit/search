@@ -256,7 +256,11 @@ class Client implements SearchClientInterface
         $rootProperties = $this->getRootMapping($metadata->rootMappings);
 
         $mapping = new Mapping($type, $properties);
-        $mapping->disableSource($metadata->source);
+        if(count($metadata->source_paths)) {
+            $mapping->setSource($metadata->source_paths);
+        } else {
+            $mapping->disableSource($metadata->source);
+        }
         if (isset($metadata->boost)) {
             $mapping->setParam('_boost', array('name' => '_boost', 'null_value' => $metadata->boost));
         }
