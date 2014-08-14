@@ -236,7 +236,7 @@ class ClassMetadata implements ClassMetadataInterface
     /**
      * Checks if the given field name is a mapped identifier for this class.
      *
-     * @param string $fieldName
+     * @param  string  $fieldName
      * @return boolean
      */
     public function isIdentifier($fieldName)
@@ -247,7 +247,7 @@ class ClassMetadata implements ClassMetadataInterface
     /**
      * Checks if the given field is a mapped property for this class.
      *
-     * @param string $fieldName
+     * @param  string  $fieldName
      * @return boolean
      */
     public function hasField($fieldName)
@@ -259,32 +259,31 @@ class ClassMetadata implements ClassMetadataInterface
      * This mapping is used in the _wakeup-method to set the reflFields after _sleep.
      *
      * @param \ReflectionProperty $field
-     * @param array $mapping
+     * @param array               $mapping
      */
     public function addFieldMapping(\Reflector $field, $mapping = array())
     {
         $fieldName = $field->getName();
         $this->fieldMappings[$fieldName] = $mapping;
-        $this->checkSourcePath($field, $mapping);
+        $this->checkSourcePath($field->name, $mapping);
     }
 
     /**
-     * [checkSourcePath description]
-     * @param  Reflector $field   [description]
-     * @param  array     $mapping [description]
-     * @return void             [description]
-     */
-    private function checkSourcePath(\Reflector $field, $mapping = array())
+    * [checkSourcePath description]
+    * @param string $field
+    * @param array $mapping [description]
+    * @return void [description]
+    */
+    private function checkSourcePath($field, $mapping = array())
     {
         if (!empty($mapping->source)) {
             if ("no" === $mapping->source) {
-                $this->source_paths['excludes'][] = $field->name;
+                $this->source_paths['excludes'][] = $field;
             } elseif ("yes" === $mapping->source) {
-                $this->source_paths['includes'][] = $field->name;
+                $this->source_paths['includes'][] = $field;
             }
         }
     }
-
     /**
      * @param array $mapping
      */
@@ -297,12 +296,12 @@ class ClassMetadata implements ClassMetadataInterface
      * This mapping is used in the _wakeup-method to set the parameters after _sleep.
      *
      * @param \ReflectionProperty $field
-     * @param array $mapping
+     * @param array               $mapping
      */
     public function addParameterMapping(\Reflector $field, $mapping = array())
     {
         $fieldName = $field->getName();
-        $this->parameters[$fieldName] = $mapping;
+        $this->parameters[$fieldName] = $fmapping;
     }
 
     /**
@@ -314,11 +313,10 @@ class ClassMetadata implements ClassMetadataInterface
         $this->reflFields[] = $field;
     }*/
 
-
     /**
      * Checks if the given field is a mapped association for this class.
      *
-     * @param string $fieldName
+     * @param  string  $fieldName
      * @return boolean
      */
     public function hasAssociation($fieldName)
@@ -329,7 +327,7 @@ class ClassMetadata implements ClassMetadataInterface
     /**
      * Checks if the given field is a mapped single valued association for this class.
      *
-     * @param string $fieldName
+     * @param  string  $fieldName
      * @return boolean
      */
     public function isSingleValuedAssociation($fieldName)
@@ -340,7 +338,7 @@ class ClassMetadata implements ClassMetadataInterface
     /**
      * Checks if the given field is a mapped collection valued association for this class.
      *
-     * @param string $fieldName
+     * @param  string  $fieldName
      * @return boolean
      */
     public function isCollectionValuedAssociation($fieldName)
@@ -376,7 +374,7 @@ class ClassMetadata implements ClassMetadataInterface
      * This type names can be implementation specific but should at least include the php types:
      * integer, string, boolean, float/double, datetime.
      *
-     * @param string $fieldName
+     * @param  string $fieldName
      * @return string
      */
     public function getTypeOfField($fieldName)
@@ -389,7 +387,7 @@ class ClassMetadata implements ClassMetadataInterface
      * Currently not necessary but needed by Interface
      *
      *
-     * @param string $assocName
+     * @param  string $assocName
      * @return string
      */
     public function getAssociationTargetClass($assocName)
@@ -412,7 +410,7 @@ class ClassMetadata implements ClassMetadataInterface
      *
      * Has to return an empty array if no identifier isset.
      *
-     * @param object $object
+     * @param  object $object
      * @return array
      */
     public function getIdentifierValues($object)
