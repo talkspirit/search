@@ -274,22 +274,22 @@ class ClassMetadata implements ClassMetadataInterface
     {
         $fieldName = $field->getName();
         $this->fieldMappings[$fieldName] = $mapping;
-        $this->checkSourcePath($field, $mapping);
+        $this->checkSourcePath($field->name, $mapping);
     }
 
     /**
      * [checkSourcePath description]
-     * @param  Reflector $field   [description]
+     * @param string $field
      * @param  array     $mapping [description]
      * @return void             [description]
      */
-    private function checkSourcePath(\Reflector $field, $mapping = array())
+    private function checkSourcePath($field, $mapping = array())
     {
         if(!empty($mapping->source)) {
             if("no" === $mapping->source) {
-                $this->source_paths['excludes'][] = $field->name;
+                $this->source_paths['excludes'][] = $field;
             } elseif("yes" === $mapping->source) {
-                $this->source_paths['includes'][] = $field->name;
+                $this->source_paths['includes'][] = $field;
             }
         }
     }
