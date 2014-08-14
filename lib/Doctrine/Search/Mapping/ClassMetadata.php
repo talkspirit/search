@@ -86,6 +86,10 @@ class ClassMetadata implements ClassMetadataInterface
      * @var boolean
      */
     public $source = true;
+    /**
+     * @var array
+     */
+    public $source_paths = [];
 
     /**
      * @var float
@@ -189,6 +193,7 @@ class ClassMetadata implements ClassMetadataInterface
             $reflField = $this->reflClass->getProperty($field);
             $reflField->setAccessible(true);
             $this->reflFields[$field] = $reflField;
+            $this->checkSourcePath($field, $mapping);
         }
     }
 
@@ -269,6 +274,24 @@ class ClassMetadata implements ClassMetadataInterface
     {
         $fieldName = $field->getName();
         $this->fieldMappings[$fieldName] = $mapping;
+        $this->checkSourcePath($field, $mapping);
+    }
+
+    /**
+     * [checkSourcePath description]
+     * @param  Reflector $field   [description]
+     * @param  array     $mapping [description]
+     * @return void             [description]
+     */
+    private function checkSourcePath(\Reflector $field, $mapping = array())
+    {
+        if(!empty($mapping->source)) {
+            if("no" === $mapping->source) {
+                $this->source_paths['excludes'][] = $field->name;
+            } elseif("yes" === $mapping->source) {
+                $this->source_paths['includes'][] = $field->name;
+            }
+        }
     }
 
     /**
