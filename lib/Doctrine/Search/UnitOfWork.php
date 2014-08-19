@@ -6,6 +6,7 @@ use Doctrine\Search\SearchManager;
 use Doctrine\Search\Exception\DoctrineSearchException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Search\Mapping\ClassMetadata;
+use Doctrine\Search\Paginator;
 use Traversable;
 
 class UnitOfWork
@@ -260,6 +261,21 @@ class UnitOfWork
         }
 
         return $this->hydrateEntity($class, $document);
+    }
+
+    /**
+     * Load and hydrate a document collection
+     *
+     * @param array $classes
+     * @param unknown $query
+     */
+    public function paginateCollection(array $classes, Paginator $paginator)
+    {
+        $results = $this->sm->getClient()->search($paginator->getQuery(), $classes);
+        $collection = $this->hydrateCollection($classes, $results);
+        $paginator->setResults($results);
+        $paginator->setHydratedResults($collection);
+        return $paginator;
     }
 
     /**

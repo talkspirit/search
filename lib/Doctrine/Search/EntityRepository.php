@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Search\SearchManager;
 use Doctrine\Search\Mapping\ClassMetadata;
 use Doctrine\Search\Exception\DoctrineSearchException;
+use Doctrine\Search\Paginator;
 
 class EntityRepository implements ObjectRepository
 {
@@ -92,6 +93,16 @@ class EntityRepository implements ObjectRepository
     public function search($query)
     {
         return $this->_sm->getUnitOfWork()->loadCollection(array($this->_class), $query);
+    }
+
+    /**
+     * Execute a direct search with Paginator to encapsulate results
+     *
+     * @param object $paginator
+     */
+    public function searchWithPaginator(Paginator $paginator)
+    {
+        return $this->_sm->getUnitOfWork()->paginateCollection(array($this->_class), $paginator);
     }
 
     /**
