@@ -179,11 +179,10 @@ class UnitOfWork
             }
         }
 
-        $this->clear();
-
         if ($this->evm->hasListeners(Events::postFlush)) {
             $this->evm->dispatchEvent(Events::postFlush, new Event\PostFlushEventArgs($this->sm));
         }
+        $this->clear();
     }
 
     /**
