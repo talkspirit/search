@@ -340,7 +340,7 @@ class UnitOfWork
             }
         }
 
-        $data[$class->getIdentifier()] = $document->getId();
+        $data[join(',', $class->getIdentifier())] = $document->getId();
 
         $entity = $this->sm->getSerializer()->deserialize($class->className, json_encode($data));
 
